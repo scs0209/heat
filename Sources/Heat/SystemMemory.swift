@@ -32,7 +32,8 @@ struct SystemMemory: Equatable {
         )
     }
 
-    /// Activity Monitor–style approximation via HOST_VM_INFO64.
+    /// Aligns with Activity Monitor’s “Memory Used” ≈ App + Wired + Compressed.
+    /// File cache (inactive/external) is reclaimable and is NOT counted as used.
     static func sample() -> SystemMemory {
         let total = ProcessInfo.processInfo.physicalMemory
         var pageSize: vm_size_t = 0
@@ -52,19 +53,18 @@ struct SystemMemory: Equatable {
         guard result == KERN_SUCCESS else { return .empty }
 
         let ps = UInt64(pageSize)
-        let active = UInt64(stats.active_count) * ps
-        let inactive = UInt64(stats.inactive_count) * ps
-        let speculative = UInt64(stats.speculative_count) * ps
         let wired = UInt64(stats.wire_count) * ps
         let compressed = UInt64(stats.compressor_page_count) * ps
         let free = UInt64(stats.free_count) * ps
-        // Matches Activity Monitor “Memory Used” closely enough for a menubar summary.
-        let used = active + inactive + speculative + wired + compressed
-        let app = active + inactive + speculative
+        let internalPages = UInt64(stats.internal_page_count) * ps
+        let purgeable = UInt64(stats.purgeable_count) * ps
+        // App Memory (AM): anonymous app pages minus purgeable
+        let app = internalPages > purgeable ? internalPages - purgeable : 0
+        let used = min(app + wired + compressed, total)
 
         return SystemMemory(
             totalBytes: total,
-            usedBytes: min(used, total),
+            usedBytes: used,
             freeBytes: free,
             compressedBytes: compressed,
             wiredBytes: wired,
