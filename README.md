@@ -90,6 +90,20 @@ heat/
   docs/             # screenshots
 ```
 
+## Alternatives
+
+heat is deliberately small and focused. If you need more, these excellent open-source projects cover overlapping ground:
+
+| Project | Menu bar temp/thermal | Culprit process list | Kill from popover | Style |
+|---------|:---:|:---:|:---:|-------|
+| **heat** | ✅ | ✅ CPU + memory | ✅ | single-purpose, ad-hoc signed |
+| [Stats](https://github.com/exelban/stats) | ✅ | ❌ | ❌ | full-featured suite (CPU/GPU/disk/net/sensors) |
+| [Hot](https://github.com/macmade/hot) | ✅ | ❌ | ❌ | temperature & throttling only |
+| [Eul](https://github.com/gao-sun/eul) | ✅ | ❌ | ❌ | composable SwiftUI widgets |
+| [RamGuard](https://github.com/clintoncodewell/ramguard) | ❌ | ⚠️ memory only | ✅ | find & quit RAM hogs |
+
+heat's niche: **"why is my Mac hot — find the culprit and quit it in seconds, straight from the menu bar."**
+
 ## Contributing
 
 PRs and issues are welcome. Please read [CONTRIBUTING.md](CONTRIBUTING.md) first.
