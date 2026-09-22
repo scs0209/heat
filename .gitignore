@@ -1,0 +1,17 @@
+# macOS
+.DS_Store
+dist/
+*.app
+build/
+DerivedData/
+
+# Swift / Xcode
+xcuserdata/
+*.xcuserstate
+*.moved-aside
+*.pbxuser
+!default.pbxuser
+
+# Local agent / skills tooling
+.agents/
+skills-lock.json
